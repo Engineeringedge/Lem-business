@@ -280,7 +280,7 @@
     <script>
         // --- SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://jhlrrdoxanlctkbzmtzd.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'sb_publishable_9EJwLWhS982bWPz0ZJ9Z1A_...'; 
+        const SUPABASE_ANON_KEY = 'sb_publishable_9EJwLWhS982bWPz0ZJ9Z1A_9EJwLWhS982bWPz0ZJ9Z1A'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // --- NAVIGATION ---
@@ -307,7 +307,7 @@
             if (error) {
                 alert('ምዝገባ አልተሳካም: ' + error.message);
             } else {
-                alert('ምዝገባው ተሳክቷል! የኢሜይል ማረጋገጫ ሊንክ ተልኮልዎ ይሆናል ወይም አሁን መግባት ይችላሉ።');
+                alert('ምዝገባው ተሳክቷል! አሁን መግባት ይችላሉ።');
             }
         }
 
@@ -371,7 +371,7 @@
                 return;
             }
 
-            alert('የክፍያ ጥያቄዎ በትክክል ተልኳል! አድሚኑ አጽድቆ እስኪያረጋግጠው ይጠብቁ።');
+            alert('የክፍያ ጥያቄዎ በትክክል ተልኳል!');
             document.getElementById('dep-amount').value = '';
             document.getElementById('dep-ref').value = '';
         }
