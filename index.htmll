@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>የኦንላይን ቢዝነስ - ሲስተም</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .btn-switch {
+            background-color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .btn-switch:hover {
+            background-color: #5a6268;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e2f0d9;
+            border: 1px solid #c8e6b1;
+            display: none;
+            border-radius: 5px;
+            text-align: center;
+            word-break: break-all;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-approve {
+            background-color: #28a745;
+            padding: 5px 8px;
+            font-size: 14px;
+        }
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- የገጽ መቀየሪያ (ማንኛውም ሰው ወደ አድሚን ወይም ተጠቃሚ ገጽ ለመቀየር) -->
+        <button class="btn-switch" onclick="switchView()">የገጽ ዓይነት ቀይር (User / Admin)</button>
+
+        <!-- 1. የተጠቃሚዎች ክፍል (Register & Deposit) -->
+        <div id="userSection" class="section active">
+            <h2>በኦንላይን ቢዝነስ ተቀላቀሉ</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>ሙሉ ስም</label>
+                    <input type="text" id="fullName" required placeholder="ስምዎን ያስገቡ">
+                </div>
+                <div class="form-group">
+                    <label>ስልክ ቁጥር</label>
+                    <input type="text" id="phone" required placeholder="09...">
+                </div>
+                <div class="form-group">
+                    <label>የጋበዘዎት ሰው ኮድ (ካለ)</label>
+                    <input type="text" id="refCode" placeholder="ሪፈራል ኮድ">
+                </div>
+                <button type="submit">ተመዝገብ</button>
+            </form>
+
+            <div id="successBox" class="result">
+                <h3>ምዝገባው ተሳክቷል!</h3>
+                <p id="userRefDisplay"></p>
+            </div>
+
+            <!-- ደፖዚት ፎርም (ከተመዘገበ በኋላ የሚከፈት) -->
+            <div id="depositSection" style="display: none; margin-top: 20px;">
+                <hr>
+                <h2>የገንዘብ ማስገቢያ (Deposit)</h2>
+                <form id="depositForm">
+                    <div class="form-group">
+                        <label>የብር መጠን</label>
+                        <input type="number" id="depositAmount" required placeholder="ብር ያስገቡ">
+                    </div>
+                    <div class="form-group">
+                        <label>የክፍያ መንገድ</label>
+                        <select id="paymentMethod">
+                            <option value="Telebirr">ቴሌብር (Telebirr)</option>
+                            <option value="CBE">ንግድ ባንክ (CBE)</option>
+                            <option value="Awash">አዋሽ ባንክ (Awash Bank)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ትራንዛክሽን ኮድ</label>
+                        <input type="text" id="transactionId" required placeholder="ማረጋገጫ ቁጥር">
+                    </div>
+                    <button type="submit">ደፖዚቱን ላክ</button>
+                </form>
+
+                <div id="depositSuccess" class="result">
+                    <h3>የደፖዚት ጥያቄዎ ደርሷል!</h3>
+                    <p>አስተዳዳሪው ሲያረጋግጠው ወደ ቦርሳዎ ይጨመራል።</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. የአድሚን ክፍል (Admin Panel) -->
+        <div id="adminSection" class="section">
+            <h2>የአድሚን መቆጣጠሪያ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>መጠን</th>
+                        <th>ባንክ</th>
+                        <th>ኮድ</th>
+                        <th>ሁኔታ</th>
+                        <th>እርምጃ</th>
+                    </tr>
+                </thead>
+                <tbody id="depositsTableBody">
+                    <!-- ዳታዎች እዚህ ይሞላሉ -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ** ጠቃሚ ማሳሰቢያ፦ ከዚህ በታች ያሉትን የSupabase መረጃዎች በእርስዎ ትክክለኛ መረጃ ይቀይሯቸው! **
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let registeredUserId = null;
+
+        // ከሊንክ ላይ ሪፈራል ማንበብ
+        const urlParams = new URLSearchParams(window.location.search);
+        const invitedBy = urlParams.get('ref');
+        if (invitedBy) {
+            document.getElementById('refCode').value = invitedBy;
+        }
+
+        // ገጽ መቀየሪያ (User እና Admin መቀያየሪያ)
+        function switchView() {
+            const userSec = document.getElementById('userSection');
+            const adminSec = document.getElementById('adminSection');
+            if (userSec.classList.contains('active')) {
+                userSec.classList.remove('active');
+                adminSec.classList.add('active');
+                fetchDeposits(); // አድሚን ሲከፈት ጥያቄዎችን መጫን
+            } else {
+                adminSec.classList.remove('active');
+                userSec.classList.add('active');
+            }
+        }
+
+        // የምዝገባ ሎጂክ
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const refInput = document.getElementById('refCode').value;
+            const randomCode = name.substring(0, 3).toUpperCase() + Math.floor(1000 + Math.random() * 9000);
+            
+            try {
+                const { data, error } = await supabase.from('profiles').insert([
+                    { full_name: name, phone_number: phone, referral_code: randomCode, referred_by: refInput || null }
+                ]).select();
+
+                if (error) throw error;
+                if (data && data.length > 0) registeredUserId = data[0].id;
+
+                document.getElementById('registerForm').style.display = 'none';
+                const successBox = document.getElementById('successBox');
+                successBox.style.display = 'block';
+                successBox.querySelector('p').innerHTML = `
+                    እንኳን ደህና መጡ <b>${name}</b>!<br>
+                    ሪፈራል ኮድ: <b>${randomCode}</b><br><br>
+                    ሊንክዎ:<br><code>https://yourwebsite.com/?ref=${randomCode}</code>
+                `;
+                document.getElementById('depositSection').style.display = 'block';
+            } catch (error) {
+                alert('ስህተት: ' + error.message);
+            }
+        });
+
+        // የደፖዚት ሎጂክ
+        document.getElementById('depositForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const amount = document.getElementById('depositAmount').value;
+            const method = document.getElementById('paymentMethod').value;
+            const txId = document.getElementById('transactionId').value;
+            
+            try {
+                const { error } = await supabase.from('deposits').insert([
+                    { user_id: registeredUserId, amount: parseFloat(amount), payment_method: method, receipt_url: txId, status: 'pending' }
+                ]);
+                if (error) throw error;
+                document.getElementById('depositForm').style.display = 'none';
+                document.getElementById('depositSuccess').style.display = 'block';
+            } catch (error) {
+                alert('ስህተት: ' + error.message);
+            }
+        });
+
+        // የአድሚን ጥያቄዎችን መጫን
+        async function fetchDeposits() {
+            const { data, error } = await supabase.from('deposits').select('*').order('created_at', { ascending: false });
+            if (error) return;
+            const tbody = document.getElementById('depositsTableBody');
+            tbody.innerHTML = '';
+            data.forEach(dep => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${dep.amount} ብር</td>
+                        <td>${dep.payment_method}</td>
+                        <td>${dep.receipt_url}</td>
+                        <td><b>${dep.status}</b></td>
+                        <td>${dep.status === 'pending' ? `<button class="btn-approve" onclick="approveDeposit('${dep.id}')">አጽድቅ</button>` : 'ተጠናቋል'}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function approveDeposit(id) {
+            const { error } = await supabase.from('deposits').update({ status: 'approved' }).eq('id', id);
+            if (!error) { alert('ጸድቋል!'); fetchDeposits(); }
+        }
+    </script>
+</body>
+</html>
