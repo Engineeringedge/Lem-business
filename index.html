@@ -52,7 +52,7 @@
             text-decoration: none;
             margin-left: 1.5rem;
             font-weight: 500;
-            transition: color 0.3s;
+            cursor: pointer;
         }
 
         nav a:hover {
@@ -75,7 +75,7 @@
             margin-bottom: 1.5rem;
         }
 
-        h1, h2, h3 {
+        h2, h3 {
             margin-bottom: 1rem;
         }
 
@@ -89,7 +89,6 @@
             font-weight: bold;
             width: 100%;
             margin-top: 1rem;
-            transition: background 0.3s;
         }
 
         .btn:hover {
@@ -176,11 +175,11 @@
     <header>
         <div class="logo">Lem Business</div>
         <nav id="nav-links">
-            <a href="#" onclick="showSection('home')">መነሻ ገጽ</a>
-            <a href="#" onclick="showSection('dashboard')" id="nav-dash" class="hidden">ዳሽቦርድ</a>
-            <a href="#" onclick="showSection('deposit')" id="nav-dep" class="hidden">ገንዘብ ገቢ ማድረጊያ</a>
-            <a href="#" onclick="showSection('admin')" id="nav-admin" class="hidden">አድሚን</a>
-            <a href="#" onclick="logout()" id="nav-logout" class="hidden">ውጣ (Logout)</a>
+            <a onclick="showSection('home')">መነሻ ገጽ</a>
+            <a onclick="showSection('dashboard')" id="nav-dash" class="hidden">ዳሽቦርድ</a>
+            <a onclick="showSection('deposit')" id="nav-dep" class="hidden">ገንዘብ ገቢ ማድረጊያ</a>
+            <a onclick="showSection('admin')" id="nav-admin" class="hidden">አድሚን</a>
+            <a onclick="logout()" id="nav-logout" class="hidden">ውጣ</a>
         </nav>
     </header>
 
@@ -188,7 +187,7 @@
         <!-- 1. Home / Auth Section -->
         <section id="sec-home" class="card">
             <h2>እንኳን ወደ Lem Business በደህና መጡ!</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">ይመዝገቡ፣ ኢንቨስት ያድርጉ እንዲሁም ሰዎችን በመጋበዝ (Referral) ትርፍ ያግኙ።</p>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">ይመዝገቡ እና ኢንቨስት ያድርጉ።</p>
             
             <div id="auth-forms">
                 <div class="input-group">
@@ -199,8 +198,8 @@
                     <label>የምስጢር ቃል (Password)</label>
                     <input type="password" id="auth-pass" placeholder="******">
                 </div>
-                <button class="btn" onclick="login()">ግበሩ (Login)</button>
-                <button class="btn" style="background-color: var(--accent); margin-top: 0.5rem;" onclick="register()">አዲስ መለያ ፍጠሩ (Register)</button>
+                <button class="btn" id="login-btn">ግበሩ (Login)</button>
+                <button class="btn" id="register-btn" style="background-color: var(--accent);">አዲስ መለያ ፍጠሩ (Register)</button>
             </div>
         </section>
 
@@ -221,26 +220,11 @@
                     <p id="user-ref-count">0</p>
                 </div>
             </div>
-
-            <div class="input-group">
-                <label>የእርሶ መጋበዣ ሊንክ (Referral Link)</label>
-                <input type="text" id="ref-link" readonly value="https://engineeringedge.github.io/Lem-business/">
-            </div>
         </section>
 
         <!-- 3. Deposit Section -->
         <section id="sec-deposit" class="card hidden">
             <h2>ገንዘብ ገቢ ማድረጊያ (Deposit)</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">ከታች ባሉት የባንክ አማራጮች ገንዘብ ገቢ በማድረግ የክፍያ ማረጋገጫውን ያስገቡ።</p>
-            
-            <div class="input-group">
-                <label>የሚላክበት ባንክ</label>
-                <select id="bank-select">
-                    <option>CBE (ንግድ ባንክ) - 1000xxxxxxxxx</option>
-                    <option>Telebirr - 09xxxxxxxx</option>
-                    <option>BOA (አቢሲንያ) - 89xxxxxxx</option>
-                </select>
-            </div>
             <div class="input-group">
                 <label>የገንዘብ መጠን (ETB)</label>
                 <input type="number" id="dep-amount" placeholder="500">
@@ -249,13 +233,12 @@
                 <label>የደረሰኝ ቁጥር / Trans Ref</label>
                 <input type="text" id="dep-ref" placeholder="FTXXXXXXXXX">
             </div>
-            <button class="btn" onclick="submitDeposit()">ገቢ ማረጋገጫ ላክ</button>
+            <button class="btn" id="dep-submit-btn">ገቢ ማረጋገጫ ላክ</button>
         </section>
 
         <!-- 4. Admin Panel -->
         <section id="sec-admin" class="card hidden">
             <h2>የአድሚን መቆጣጠሪያ (Admin Panel)</h2>
-            <h3>የገቢ ጥያቄዎች (Pending Deposits)</h3>
             <table>
                 <thead>
                     <tr>
@@ -263,34 +246,29 @@
                         <th>መጠን</th>
                         <th>ደረሰኝ ቁጥር</th>
                         <th>ሁኔታ</th>
-                        <th>እርምጃ</th>
                     </tr>
                 </thead>
-                <tbody id="admin-deposit-list">
-                    <!-- Dynamic Content -->
-                </tbody>
+                <tbody id="admin-deposit-list"></tbody>
             </table>
         </section>
     </div>
 
     <footer>
-        &copy; 2026 Lem Business. መብቱ በህግ የተጠበቀ ነው::
+        &copy; 2026 Lem Business. መብቱ በህግ የተጠበቀ ነው።
     </footer>
 
     <script>
-        // --- SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://jhlrrdoxanlctkbzmtzd.supabase.co'; 
         const SUPABASE_ANON_KEY = 'sb_publishable_9EJwLWhS982bWPz0ZJ9Z1A_9EJwLWhS982bWPz0ZJ9Z1A'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- NAVIGATION ---
         function showSection(sectionId) {
             document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById('sec-' + sectionId).classList.remove('hidden');
         }
 
-        // --- AUTH & USER LOGIC ---
-        async function register() {
+        // Event Listeners for buttons to guarantee click response
+        document.getElementById('register-btn').addEventListener('click', async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
 
@@ -299,19 +277,15 @@
                 return;
             }
 
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: pass,
-            });
-
+            const { data, error } = await supabase.auth.signUp({ email, password: pass });
             if (error) {
                 alert('ምዝገባ አልተሳካም: ' + error.message);
             } else {
                 alert('ምዝገባው ተሳክቷል! አሁን መግባት ይችላሉ።');
             }
-        }
+        });
 
-        async function login() {
+        document.getElementById('login-btn').addEventListener('click', async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             
@@ -320,49 +294,29 @@
                 return;
             }
 
-            // Demo Admin Login check
             if(email === 'admin@lem.com' && pass === 'admin123') {
-                showAdminView();
+                document.getElementById('nav-admin').classList.remove('hidden');
+                document.getElementById('nav-logout').classList.remove('hidden');
+                document.getElementById('auth-forms').classList.add('hidden');
+                showSection('admin');
                 return;
             }
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: pass,
-            });
-
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
             if (error) {
                 alert('መግባት አልተቻለም: ' + error.message);
                 return;
             }
 
             alert('እንኳን ደህና መጡ!');
-            showUserView();
-        }
-
-        function showUserView() {
             document.getElementById('nav-dash').classList.remove('hidden');
             document.getElementById('nav-dep').classList.remove('hidden');
             document.getElementById('nav-logout').classList.remove('hidden');
             document.getElementById('auth-forms').classList.add('hidden');
             showSection('dashboard');
-        }
+        });
 
-        function showAdminView() {
-            document.getElementById('nav-admin').classList.remove('hidden');
-            document.getElementById('nav-logout').classList.remove('hidden');
-            document.getElementById('auth-forms').classList.add('hidden');
-            showSection('admin');
-            loadAdminData();
-        }
-
-        async function logout() {
-            await supabase.auth.signOut();
-            location.reload();
-        }
-
-        // --- DEPOSIT LOGIC ---
-        function submitDeposit() {
+        document.getElementById('dep-submit-btn').addEventListener('click', () => {
             const amount = document.getElementById('dep-amount').value;
             const ref = document.getElementById('dep-ref').value;
 
@@ -374,21 +328,11 @@
             alert('የክፍያ ጥያቄዎ በትክክል ተልኳል!');
             document.getElementById('dep-amount').value = '';
             document.getElementById('dep-ref').value = '';
-        }
+        });
 
-        function loadAdminData() {
-            const list = document.getElementById('admin-deposit-list');
-            list.innerHTML = `
-                <tr>
-                    <td> ተጠቃሚ </td>
-                    <td> 1000 ETB </td>
-                    <td> FT9823472 </td>
-                    <td><span style="color: orange;">በሂደት ላይ</span></td>
-                    <td>
-                        <button style="background: green; color: white; border:none; padding: 4px 8px; border-radius:4px; cursor:pointer;" onclick="alert('ተፀድቋል!')">አፅድቅ</button>
-                    </td>
-                </tr>
-            `;
+        async function logout() {
+            await supabase.auth.signOut();
+            location.reload();
         }
     </script>
 </body>
